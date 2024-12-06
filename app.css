@@ -1,0 +1,222 @@
+:root {
+  /* Light Mode Colors */
+  --bg-primary: #f0f0f0;
+  --bg-secondary: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --border-color: #dddddd;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --control-bar-bg: white;
+  --svg-color: #000000;
+}
+
+:root.dark-mode {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-primary: #e0e0e0; 
+  --text-secondary: #b0b0b0; /* Subdued text for secondary content */
+  --border-color: #333333; /* Subtle border color */
+  --shadow-color: rgba(0, 0, 0, 0.5); /* Slightly opaque shadow */
+  --control-bar-bg: #1a1a1a; /* Darker control bar background */
+  --svg-color: #fafafa; /* Matches text-primary for icons */
+}
+
+body {
+  background: linear-gradient(
+    to top,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 100%
+  );
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+  height: calc(100vh - 20px);
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: transparent;
+}
+
+#screenContainer {
+  height: 90%;
+  width: 100%;
+  display: flex;
+  gap: 5px;
+}
+
+#screenContainer > div {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  animation: fadeIn 0.3s ease;
+}
+
+.screen-header {
+  display: flex;
+  align-items: center;
+  height: 5%;
+  padding: 0 10px;
+  background-color: var(--border-color);
+}
+
+.clear-icon {
+  margin-left: auto;
+}
+
+.screen-header div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.screen-header img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.iframe-container {
+  height: 95%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#controlBar {
+  padding: 7px 0px;
+  width: 100%;
+  background-color: var(--control-bar-bg);
+  border-radius: 5px;
+  display: flex;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.left {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+}
+
+iframe {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+
+#searchForm {
+  width: 60%;
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-secondary);
+}
+
+#mainSearchInput {
+  width: 95%;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+button:hover {
+  opacity: 1;
+}
+
+select {
+  height: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.option {
+  position: relative;
+  width: 10%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.popup {
+  position: absolute;
+  background-color: var(--bg-secondary);
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  z-index: 90;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  top: -230px;
+  left: -100px;
+  width: 200px;
+  animation: fadeIn 0.3s ease;
+  color: var(--text-primary);
+}
+
+.popup-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+svg {
+  stroke: var(--svg-color);
+}
+
+path {
+  stroke: var(--svg-color);
+}
+
+circle {
+  stroke: var(--svg-color);
+}
+
+button.selected > svg > path {
+  fill: var(--svg-color);
+  animation: fadeIn 1s ease;
+}
