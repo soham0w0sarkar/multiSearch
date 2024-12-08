@@ -3,33 +3,13 @@ let searchValue = "";
 
 const searchEngines = [
   "https://www.perplexity.ai/search?q=",
-  "https://search.brave.com/search?source=llmSuggest&summary=1&q=",
   "https://www.google.com/search?q=",
-  "https://www.bing.com/search?q=",
-  "https://www.duckduckgo.com/&q=",
-  "https://www.search.yahoo.com/search?q=",
-  "https://yandex.com/search/?text=",
-  "https://scholar.google.com/scholar?q=",
-  "https://consensus.app/results/?q=",
-  "https://chatgpt.com/",
-  "https://gemini.google.com/app",
-  "https://claude.ai/new",
   "https://www.reddit.com/search/?q=",
 ];
 
 const logos = [
   "./icons/logo/perplexity.svg",
-  "./icons/logo/brave.svg",
   "./icons/logo/google.svg",
-  "./icons/logo/bing.svg",
-  "./icons/logo/duckduckgo.svg",
-  "./icons/logo/yahoo.svg",
-  "./icons/logo/yandex.svg",
-  "./icons/logo/google-scholar.svg",
-  "./icons/logo/consensus.svg",
-  "./icons/logo/chatgpt.svg",
-  "./icons/logo/gemini.svg",
-  "./icons/logo/claude.svg",
   "./icons/logo/reddit.svg",
 ];
 
@@ -45,6 +25,11 @@ function savePresets() {
 }
 
 function loadPresets() {
+  chrome.storage.sync.get("newTabOverride", (data) => {
+    document.getElementById("newTabSetting").checked =
+      data.newTabOverride || false;
+  });
+
   const savedPresets = localStorage.getItem("multiSearchPresets");
   if (savedPresets) {
     const presets = JSON.parse(savedPresets);
@@ -63,12 +48,12 @@ function loadPresets() {
       });
     } else {
       if (selectElements[0]) {
-        selectElements[0].selectedIndex = 5;
+        selectElements[0].selectedIndex = 0;
         const event1 = new Event("change");
         selectElements[0].dispatchEvent(event1);
       }
       if (selectElements[1]) {
-        selectElements[1].selectedIndex = 2;
+        selectElements[1].selectedIndex = 1;
         const event2 = new Event("change");
         selectElements[1].dispatchEvent(event2);
       }
@@ -77,12 +62,12 @@ function loadPresets() {
     setScreens(2);
     const selectElements = document.querySelectorAll("select");
     if (selectElements[0]) {
-      selectElements[0].selectedIndex = 5;
+      selectElements[0].selectedIndex = 0;
       const event1 = new Event("change");
       selectElements[0].dispatchEvent(event1);
     }
     if (selectElements[1]) {
-      selectElements[1].selectedIndex = 2;
+      selectElements[1].selectedIndex = 1;
       const event2 = new Event("change");
       selectElements[1].dispatchEvent(event2);
     }
@@ -111,6 +96,7 @@ function setScreens(number) {
   noOfScreen = number;
   savePresets();
 }
+
 document
   .getElementById("searchForm")
   .addEventListener("submit", function (event) {
@@ -127,70 +113,7 @@ document
         const select = screen.querySelector("select");
         const iframe = screen.querySelector("iframe");
 
-        const iframeDocument =
-          iframe.contentWindow.document || iframe.contentDocument;
-
-        switch (select.value) {
-          case "https://chatgpt.com/":
-            const chatGPTInput = iframeDocument.querySelector(
-              "#prompt-textarea > p",
-            );
-
-            console.log("here");
-
-            if (chatGPTInput) {
-              chatGPTInput.innerText = searchValue;
-              chatGPTInput.dispatchEvent(new Event("input", { bubbles: true }));
-
-              const submitButton = document.querySelector(
-                'button[aria-label="Send prompt"]',
-              );
-              if (submitButton) {
-                setTimeout(() => {
-                  submitButton.click();
-                }, 10000);
-              }
-            }
-            break;
-
-          case "https://gemini.google.com/app":
-            const geminiInput = iframeDocument.querySelector(
-              'textarea[aria-label="Chat with Gemini"]',
-            );
-            if (geminiInput) {
-              geminiInput.value = searchValue;
-              geminiInput.dispatchEvent(new Event("input", { bubbles: true }));
-
-              const geminiSubmitButton = iframeDocument.querySelector(
-                'button[aria-label="Send message"]',
-              );
-              if (geminiSubmitButton) {
-                geminiSubmitButton.click();
-              }
-            }
-            break;
-
-          case "https://claude.ai/new":
-            const claudeInput = iframeDocument.querySelector(
-              'textarea[placeholder="Message Claude"]',
-            );
-            if (claudeInput) {
-              claudeInput.value = searchValue;
-              claudeInput.dispatchEvent(new Event("input", { bubbles: true }));
-
-              // Attempt to trigger submit
-              const claudeSubmitButton = iframeDocument.querySelector(
-                'button[aria-label="Send Message"]',
-              );
-              if (claudeSubmitButton) {
-                claudeSubmitButton.click();
-              }
-            }
-            break;
-
-          default:
-            iframe.src = select.value + searchValue;
-        }
+        iframe.src = select.value + searchValue;
       } else {
         createScreen(screenWidth, searchValue);
       }
@@ -203,6 +126,7 @@ document
       this.mainSearchInput.value = "";
     }, 100);
   });
+
 document.addEventListener("click", function (event) {
   const clearIcon = event.target.closest(".clear-icon");
   if (clearIcon) {
@@ -252,21 +176,7 @@ function createScreen(width, value) {
   searchEngines.forEach((engine, index) => {
     const option = document.createElement("option");
     option.value = engine;
-    option.text = [
-      "Perplexity.ai",
-      "Brave Search",
-      "Google",
-      "Bing",
-      "DuckDuckGo",
-      "Yahoo",
-      "Yandex",
-      "Google Scholar",
-      "Consensus (Research)",
-      "ChatGPT",
-      "Gemini",
-      "Claude",
-      "Reddit",
-    ][index];
+    option.text = ["Perplexity.ai", "Google", "Reddit"][index];
     searchEngineSelect.appendChild(option);
   });
 
@@ -332,60 +242,6 @@ function createScreen(width, value) {
   screenContainer.appendChild(screenDiv);
 }
 
-document.getElementById("searchToggle").addEventListener("click", (e) => {
-  e.target.closest("button").classList.toggle("selected");
-  document.getElementById("chatToggle").classList.remove("selected");
-
-  const screenContainer = document.getElementById("screenContainer");
-  setScreens(3);
-
-  const selectElements = document.querySelectorAll("select");
-  if (selectElements[0]) {
-    selectElements[0].selectedIndex = 12;
-    const event1 = new Event("change");
-    selectElements[0].dispatchEvent(event1);
-  }
-  if (selectElements[1]) {
-    selectElements[1].selectedIndex = 2;
-    const event2 = new Event("change");
-    selectElements[1].dispatchEvent(event2);
-  }
-  if (selectElements[2]) {
-    selectElements[2].selectedIndex = 3;
-    const event3 = new Event("change");
-    selectElements[2].dispatchEvent(event3);
-  }
-
-  savePresets();
-});
-
-document.getElementById("chatToggle").addEventListener("click", (e) => {
-  e.target.closest("button").classList.toggle("selected");
-  document.getElementById("searchToggle").classList.remove("selected");
-
-  const screenContainer = document.getElementById("screenContainer");
-  setScreens(3);
-
-  const selectElements = document.querySelectorAll("select");
-  if (selectElements[0]) {
-    selectElements[0].selectedIndex = 9;
-    const event1 = new Event("change");
-    selectElements[0].dispatchEvent(event1);
-  }
-  if (selectElements[1]) {
-    selectElements[1].selectedIndex = 11;
-    const event2 = new Event("change");
-    selectElements[1].dispatchEvent(event2);
-  }
-  if (selectElements[2]) {
-    selectElements[2].selectedIndex = 10;
-    const event3 = new Event("change");
-    selectElements[2].dispatchEvent(event3);
-  }
-
-  savePresets();
-});
-
 document.getElementById("twoScreensBtn").addEventListener("click", () => {
   setScreens(2);
 });
@@ -416,5 +272,14 @@ document.getElementById("themeToggle").addEventListener("change", (e) => {
     document.documentElement.classList.add("dark-mode");
   }
 });
+
+document
+  .getElementById("newTabSetting")
+  .addEventListener("change", async (e) => {
+    const sync = await chrome.storage.sync.set({
+      newTabOverride: e.target.checked,
+    });
+    console.log("Synced", sync);
+  });
 
 loadPresets();

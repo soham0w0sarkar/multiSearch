@@ -9,23 +9,30 @@
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
   "action": {
     "default_title": "Multi Search NewTab",
     "default_popup": "popup/popup.html",
     "default_icon": "icons/icon-hq.png"
   },
-  "chrome_url_overrides": {
-    "newtab": "index.html"
-  },
+  "web_accessible_resources": [
+    {
+      "resources": ["index.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "omnibox": {
     "keyword": "ms"
   },
-  "permissions": [
-    "webNavigation",
-    "declarativeNetRequest",
-    "https://chatgpt.com/"
-  ],
+  "permissions": ["webNavigation", "declarativeNetRequest", "tabs", "storage"],
   "host_permissions": ["<all_urls>"],
-  "background": { "service_worker": "service-worker.js" }
+  "background": {
+    "service_worker": "service-worker.js"
+  }
 }

@@ -4,6 +4,20 @@ chrome.runtime.onInstalled.addListener(function (details) {
   }
 });
 
+chrome.tabs.onCreated.addListener((tab) => {
+  chrome.storage.sync.get("newTabOverride", (data) => {
+    if (
+      data.newTabOverride &&
+      tab.status == "loading" &&
+      tab.pendingUrl == "chrome://newtab/"
+    ) {
+      chrome.tabs.update(tab.id, {
+        url: "index.html",
+      });
+    }
+  });
+});
+
 function updateDynamicRules() {
   chrome.declarativeNetRequest
     .updateDynamicRules({
