@@ -51,9 +51,36 @@ chrome.webNavigation.onCompleted.addListener(updateDynamicRules, {
   url: [{ urlMatches: "http://*/*" }, { urlMatches: "https://*/*" }],
 });
 
+chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
+  console.log("details", details);
+
+  if (details.frameId !== 0) {
+    return;
+  }
+
+  const { defaultEngine } = await chrome.storage.sync.get("defaultEngine");
+
+  if (defaultEngine) {
+    const searchUrls = ["https://www.google.com/search"];
+    const url = new URL(details.url);
+
+    if (searchUrls.some((searchUrl) => details.url.startsWith(searchUrl))) {
+      const searchQuery = url.searchParams.get("q");
+
+      if (searchQuery) {
+        chrome.tabs.update(details.tabId, {
+          url: `index.html?q=${encodeURIComponent(searchQuery)}`,
+        });
+      }
+    }
+  }
+});
+
 chrome.omnibox.onInputEntered.addListener((text) => {
   const encodedData = encodeURIComponent(text);
   const url = `index.html?data=${encodedData}`;
+
+  console.log("url", url);
 
   chrome.tabs.create({ url });
 });

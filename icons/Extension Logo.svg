@@ -1,0 +1,12 @@
+<svg width="30" height="30" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="500" height="500" rx="75" fill="#F4F4F4"/>
+<circle cx="232.5" cy="231.5" r="178.5" stroke="#3A81F6" stroke-width="40"/>
+<rect x="372.904" y="336" width="132.718" height="52" rx="26" transform="rotate(45.2099 372.904 336)" fill="#3A81F6"/>
+<circle cx="136" cy="236" r="30" fill="#F23121"/>
+<circle cx="235" cy="236" r="30" fill="#F5B703"/>
+<circle cx="335" cy="236" r="30" fill="#3A81F6"/>
+<path d="M55 242C57 327.5 140.5 434 277 405" stroke="#F4F4F4" stroke-width="42" stroke-linecap="round" stroke-linejoin="bevel"/>
+<path d="M74 235C74 246.046 65.0457 255 54 255C42.9543 255 34 246.046 34 235C34 223.954 42.9543 215 54 215C65.0457 215 74 223.954 74 235Z" fill="#3A81F6"/>
+<path d="M305 402C305 413.046 296.046 422 285 422C273.954 422 265 413.046 265 402C265 390.954 273.954 382 285 382C296.046 382 305 390.954 305 402Z" fill="#3A81F6"/>
+<path d="M63 289.5C101.5 381.5 169.5 406.5 225.5 410" stroke="#F5B703" stroke-width="43" stroke-linecap="round" stroke-linejoin="bevel"/>
+</svg>

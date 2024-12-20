@@ -25,6 +25,10 @@
     {
       "resources": ["index.html"],
       "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["icons/Widget.svg"],
+      "matches": ["<all_urls>"]
     }
   ],
   "omnibox": {
