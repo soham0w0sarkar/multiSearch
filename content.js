@@ -31,8 +31,6 @@ const openNewTab = () => {
   window.open(chrome.runtime.getURL("index.html"), "_blank");
 };
 
-chrome.storage.sync.get();
-
 if (
   window.location.href !==
   "chrome-extension://oeajpoocanmjifppihgpnmjjfcfmjamd/index.html"

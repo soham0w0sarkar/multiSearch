@@ -362,6 +362,11 @@ button.selected > svg > path {
   animation: fadeIn 1s ease;
 }
 
+.bmcImg {
+  height: 100%;
+  width: 100%;
+}
+
 /* Links */
 a {
   text-decoration: underline;
